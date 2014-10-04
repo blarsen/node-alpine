@@ -1,0 +1,38 @@
+{
+  "name": "alpine",
+  "version": "0.1.0",
+  "description": "Alpine - the Apache Log Parser",
+  "main": "alpine.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "byline": "^4.1.1",
+    "underscore.string": "^2.3.3",
+    "through2": "^0.6.2",
+  },
+  "devDependencies": {
+    "mocha": "^1.21.4"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blarsen/node-alpine.git"
+  },
+  "keywords": [
+    "apache",
+    "mod_log",
+    "log",
+    "parser",
+    "combined",
+    "clf"
+  ],
+  "author": "Bjørn Hell Larsen <blarsen@nonews.net>",
+  "license": "Apache License 2.",
+  "bugs": {
+    "url": "https://github.com/blarsen/node-alpine/issues"
+  },
+  "homepage": "https://github.com/blarsen/node-alpine"
+}
