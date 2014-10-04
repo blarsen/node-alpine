@@ -9,7 +9,7 @@
   "dependencies": {
     "byline": "^4.1.1",
     "underscore.string": "^2.3.3",
-    "through2": "^0.6.2",
+    "through2": "^0.6.2"
   },
   "devDependencies": {
     "mocha": "^1.21.4"
