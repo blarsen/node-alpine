@@ -12,7 +12,6 @@ var Alpine = require('alpine');
 var alpine = new Alpine("%h %s %B");
 var data = alpine.parseLine("www.brain-salad.com 403 4321");
 console.log(data);
-
 ```
 
 which produces
@@ -31,22 +30,19 @@ var alpine = new Alpine();
 alpine.parseReadStream(fs.createReadStream('access_log.1', {encoding: "utf8"}), function(data) {
   console.log("Status: " + data.status + ", request: " + data.request);
 });
-
  ```
 
 ### Use streams
 Alpine supports duplex streaming, but the stream it reads from must be a per-line stream, as implemented by the byline module.
 
-Alpine().getObjectStream() returns a duplex stream that will write parsed objects.
-Alpine().getStringStream() returns a duplex stream that will write the same parsed objects, but stringified
+- Alpine().getObjectStream() returns a duplex stream that will write parsed objects.
+- Alpine().getStringStream() returns a duplex stream that will write the same parsed objects, but stringified
 
 ```js
 var Alpine = require('alpine');
 byline.createStream(fs.createReadStream('access_log.1', {encoding: "utf8"}))
   .pipe(new Alpine().getStringStream())
   .pipe(fs.createWriteStream("access.out"));
-})
-
 ```
 
 
