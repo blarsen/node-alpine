@@ -11,6 +11,12 @@ var StringReader = require('../stringreader');
 
 describe('Alpine', function () {
 
+    it("should have predefined log formats", function () {
+        assert(Alpine.LOGFORMATS.COMBINED, "No combined log format");
+        assert(Alpine.LOGFORMATS.CLF, "No common log format");
+        assert(Alpine.LOGFORMATS.CLF_VHOST, "No common log format with vhosts");
+    })
+
     it("should let me specify a log format", function () {
         var a = new Alpine("%h");
         assert(a.getLogFormat() == "%h");
@@ -18,7 +24,7 @@ describe('Alpine', function () {
 
     it("should default to COMBINED log format", function () {
         var a = new Alpine();
-        assert(a.getLogFormat() == a.LOGFORMATS.COMBINED);
+        assert(a.getLogFormat() == Alpine.LOGFORMATS.COMBINED);
     })
 
     it("should allow me to set the log format programatically", function () {

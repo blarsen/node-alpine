@@ -5,21 +5,6 @@
  * Created by blarsen on 02.10.14.
  */
 
-// TODO code cleanup, consistent commenting, possibly break into more modules
-// TODO bundle this up as a real module (package.json, readme.md etc) and commit it to Github
-
-/*
- Notes and questions stemming from a reading of the mod_log spec:
-
- - Should we accept non-whitespace literal text in logs? If so, what should we do with it?
-   Or should we just make it an requirement that the only non-header content be whitespaces and double quotes?
-   (If we do this we won't be able to parse the "Referer log format" which contains ->)
- - If we accept non-whitespace/quote text we will have to support \n, \t, quoted quotes and backslashes, and  %%, i.e. a quoted percentage sign
-  - We will probably aim for support for httpd 2.0.46 which has quoting of %r, %i and %o - previous versions logged
-   the raw content of the values making logs hard to parse
-
-
-  */
 
 var Buffer = require('./buffer');
 
@@ -29,7 +14,6 @@ var through2 = require('through2');
 
 var Alpine = function (logformat) {
 
-    this.LOGFORMATS = LOGFORMATS;
     this.setLogFormat = setLogFormat;
     this.getLogFormat = getLogFormat;
     this.parseLine = parseLine;
@@ -40,7 +24,7 @@ var Alpine = function (logformat) {
     if (logformat)
         this.setLogFormat(logformat);
     else
-        this.setLogFormat(this.LOGFORMATS.COMBINED);
+        this.setLogFormat(Alpine.LOGFORMATS.COMBINED);
 
 };
 
@@ -144,7 +128,6 @@ function parseLogFormat(logformat) {
             fieldName = PARAMFIELDS[field] + ' ' + value;
         }
 
-        field = field.replace(/{.*}/g, "{...}");
         if (!FIELDS[field])
             throw new Error("Unknown log format field "+field);
         fields.push({
@@ -164,7 +147,7 @@ function stripQuotes(text) {
     return text;
 }
 
-var LOGFORMATS = {
+Alpine.LOGFORMATS = {
     COMBINED: "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"",
     CLF: "%h %l %u %t \"%r\" %>s %b",
     CLF_VHOST: "%v %h %l %u %t \"%r\" %>s %b"
@@ -220,6 +203,5 @@ PARAMFIELDS = {
     '^ti': 'RequestTrailerLine',
     '^to': 'ResponseTrailerLine'
 }
-
 
 module.exports = Alpine;
