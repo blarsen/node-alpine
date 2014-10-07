@@ -48,8 +48,8 @@ function getStringStream() {
 
 function parseReadStream(stream, callback) {
     var thisAlpine = this;
-    var stream = byline.createStream(stream);
-    stream.pipe(through2.obj(function(chunk, enc, t2callback) {
+    var lineStream = byline.createStream(stream);
+    lineStream.pipe(through2.obj(function(chunk, enc, t2callback) {
         var data = thisAlpine.parseLine(chunk.toString());
         callback(data);
         t2callback();
@@ -91,7 +91,7 @@ function parseLine(line) {
             val = buf.getUpto(' ');
         }
         result[field.name] = val;
-    })
+    });
 
     return result;
 }
@@ -103,7 +103,7 @@ function parseLogFormat(logformat) {
         buf.skipSpaces();
         var field = buf.getUpto(" ");
         var isQuoted = field[0] === '"';
-        var field = stripQuotes(field);
+        field = stripQuotes(field);
 
         // Check that this is a field definition (starting with %) and remove the prefix
         if (!(field[0] === "%"))
@@ -112,29 +112,31 @@ function parseLogFormat(logformat) {
 
         // Remove modifiers
         if (field.indexOf("{") > 0) {
-            field = field.replace(/^[0-9!]+//g, "");
+            field = field.replace(/^[0-9!]+/, "");
         }
         field = field.replace(/[<>]/g, "");
 
         var fieldName = FIELDS[field];
 
+        var fieldLetter = field;
+
         // Handle parameterized fields
         if (field.indexOf('{') >= 0) {
             var matches = (/{(.*)}(.*)/).exec(field);
             var value = matches[1];
-            var field = matches[2];
-            if (!PARAMFIELDS[field])
-                throw new Error("The field "+field+" should not be parameterized");
-            fieldName = PARAMFIELDS[field] + ' ' + value;
+            fieldLetter = matches[2];
+            if (!PARAMFIELDS[fieldLetter])
+                throw new Error("The field "+fieldLetter+" should not be parameterized");
+            fieldName = PARAMFIELDS[fieldLetter] + ' ' + value;
         }
 
-        if (!FIELDS[field])
-            throw new Error("Unknown log format field "+field);
+        if (!FIELDS[fieldLetter])
+            throw new Error("Unknown log format field "+fieldLetter);
         fields.push({
             field: field,
             name: fieldName,
             isQuoted: isQuoted,
-            isDate: field === 't'
+            isDate: fieldLetter === 't'
         });
     }
     return fields;
@@ -151,7 +153,7 @@ Alpine.LOGFORMATS = {
     COMBINED: "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"",
     CLF: "%h %l %u %t \"%r\" %>s %b",
     CLF_VHOST: "%v %h %l %u %t \"%r\" %>s %b"
-}
+};
 
 var FIELDS = {
     'a': 'remoteIP',
@@ -185,11 +187,9 @@ var FIELDS = {
     'i': 'requestHeader',
     'n': 'note',
     'o': 'responseHeader',
-    'p': 'formatPort',
-    'P': 'pidFormat',
     '^ti': 'requestTrailerLine',
     '^to': 'responseTrailerLine'
-}
+};
 
 PARAMFIELDS = {
     "c": "Cookie",
@@ -202,6 +202,6 @@ PARAMFIELDS = {
     "t": "Time",
     '^ti': 'RequestTrailerLine',
     '^to': 'ResponseTrailerLine'
-}
+};
 
 module.exports = Alpine;
