@@ -40,6 +40,7 @@ which produces
 
 ### Parse file in combined log format with callbacks
 ```js
+var fs = require('fs')
 var Alpine = require('alpine');
 var alpine = new Alpine();
 alpine.parseReadStream(fs.createReadStream('access_log', {encoding: "utf8"}),
@@ -55,8 +56,9 @@ Alpine supports duplex streaming, but the stream it reads from must be a per-lin
 - Alpine().getStringStream() returns a duplex stream that will write the same parsed objects, but serialized using JSON.stringify()
 
 ```js
-var Alpine = require('alpine');
+var fs = require('fs')
 var byline = require('byline');
+var Alpine = require('alpine');
 byline.createStream(fs.createReadStream('access_log', {encoding: "utf8"}))
   .pipe(new Alpine().getStringStream())
   .pipe(fs.createWriteStream("access.out"));

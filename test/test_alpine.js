@@ -62,6 +62,12 @@ describe('Alpine', function () {
         assert(result.remoteHost == "foo.bar.baz", "Wrong remotehost: " + result.remoteHost);
     })
 
+    it("should handle quoted quotes in the request field correctly", function() {
+        var a = new Alpine("\"%r\"");
+        var result = a.parseLine('"a\\"quoted quote"');
+        assert(result.request == 'a\\"quoted quote');
+    })
+
     it("should handle the time field correctly", function () {
         var a = new Alpine("%t");
         var result = a.parseLine("[01/Oct/2014:04:05:11 +0200]");

@@ -20,7 +20,7 @@ var Buffer = function(data, index) {
         if (!this.hasMore())
             return undefined;
         var result = '';
-        while (this.hasMore() && this.data[this.index] != char) {
+        while (this.hasMore() && (this.data[this.index] != char || this.data[this.index-1] == '\\')) {
             result += this.data[this.index++];
         }
         return result;
