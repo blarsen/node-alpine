@@ -5,6 +5,7 @@
  * Created by blarsen on 02.10.14.
  */
 
+"use strict";
 
 var Buffer = require('./buffer');
 
@@ -80,13 +81,13 @@ function parseLine(line) {
                 throw new Error("Field defined as quoted was not quoted");
             buf.skip();
             val = buf.getUpto('"');
-            buf.skip();
+            buf.skipSpaces();
         } else if (field.isDate) {
             if (!(buf.lookingAt() === '['))
                 throw new Error("Time field is not enclosed in brackets");
             buf.skip();
             val = buf.getUpto(']');
-            buf.skip();
+            buf.skipSpaces();
         } else {
             val = buf.getUpto(' ');
         }
@@ -191,7 +192,7 @@ var FIELDS = {
     '^to': 'responseTrailerLine'
 };
 
-PARAMFIELDS = {
+var PARAMFIELDS = {
     "c": "Cookie",
     "e": "Environment",
     "i": "RequestHeader",

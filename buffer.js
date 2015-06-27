@@ -2,6 +2,7 @@
  * Created by blarsen on 03.10.14.
  */
 
+"use strict";
 
 var Buffer = function(data, index) {
     this.data = data;
