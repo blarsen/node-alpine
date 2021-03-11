@@ -81,12 +81,14 @@ function parseLine(line) {
                 throw new Error("Field defined as quoted was not quoted");
             buf.skip();
             val = buf.getUpto('"');
+            buf.skip(1);
             buf.skipSpaces();
         } else if (field.isDate) {
             if (!(buf.lookingAt() === '['))
                 throw new Error("Time field is not enclosed in brackets");
             buf.skip();
             val = buf.getUpto(']');
+            buf.skip(1);
             buf.skipSpaces();
         } else {
             val = buf.getUpto(' ');
