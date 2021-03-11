@@ -8,11 +8,11 @@
   },
   "dependencies": {
     "byline": "^4.1.1",
-    "underscore.string": "^2.3.3",
-    "through2": "^0.6.2"
+    "through2": "^0.6.2",
+    "underscore.string": "^3.3.5"
   },
   "devDependencies": {
-    "mocha": "^1.21.4"
+    "mocha": "^8.3.1"
   },
   "scripts": {
     "test": "mocha"
